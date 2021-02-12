@@ -3,8 +3,10 @@ package org.sfg.recipeapp.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@Controller()
-@RequestMapping("/recipes")
+@Controller
 public class IndexController {
-
+	@RequestMapping({ "", "/", "/index" })
+	public String getIndex() {
+		return "index";
+	}
 }
