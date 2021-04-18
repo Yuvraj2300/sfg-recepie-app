@@ -1,11 +1,13 @@
 package org.sfg.recipeapp.domain;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,8 +36,8 @@ public class Recipe {
 	private Integer servings;
 	private Integer source;
 	private String url;
+	@Lob
 	private String directions;
-	// private Difficulty difficulty;
 
 	@Lob
 	private Byte[] image;
@@ -43,17 +45,17 @@ public class Recipe {
 	@Enumerated(value = EnumType.STRING)
 	private Difficulty difficulty;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
-	private Set<Ingredient> ingredients;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe", fetch = FetchType.EAGER)
+	private Set<Ingredient> ingredients = new HashSet<Ingredient>();
 
 	@OneToOne(cascade = CascadeType.ALL)
 	private Notes notes;
 
 	//@formatter:off
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "recipe_category", 
 		joinColumns = @JoinColumn(name="recipe_id"), 
 		inverseJoinColumns = @JoinColumn(name="category_id"))
-	private Set<Category> categories;
+	private Set<Category> categories	=	new	HashSet<Category>();
 	//@formatter:on
 }
