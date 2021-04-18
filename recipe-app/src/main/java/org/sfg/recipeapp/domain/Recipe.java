@@ -18,6 +18,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -49,6 +50,7 @@ public class Recipe {
 	private Set<Ingredient> ingredients = new HashSet<Ingredient>();
 
 	@OneToOne(cascade = CascadeType.ALL)
+	@Setter(AccessLevel.NONE)
 	private Notes notes;
 
 	//@formatter:off
@@ -58,4 +60,16 @@ public class Recipe {
 		inverseJoinColumns = @JoinColumn(name="category_id"))
 	private Set<Category> categories	=	new	HashSet<Category>();
 	//@formatter:on
+
+	public void setNotes(Notes notes) {
+		this.notes = notes;
+		notes.setRecipe(this);
+	}
+
+	public Recipe addIngredient(Ingredient ingredient) {
+		ingredient.setRecipe(this);
+		this.ingredients.add(ingredient);
+		return this;
+	}
+
 }
