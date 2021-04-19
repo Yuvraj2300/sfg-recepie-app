@@ -7,11 +7,13 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Getter
+@EqualsAndHashCode(exclude = { "recipe" })
 @Setter
 public class Notes {
 
