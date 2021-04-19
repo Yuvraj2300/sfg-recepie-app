@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.sfg.recipeapp.domain.Category;
 import org.sfg.recipeapp.domain.Difficulty;
 import org.sfg.recipeapp.domain.Ingredient;
@@ -35,6 +37,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
 	}
 
 	@Override
+	@Transactional
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 		log.info("#############:::::Running persistence logic");
 		recipeRepository.saveAll(getRecipes());
