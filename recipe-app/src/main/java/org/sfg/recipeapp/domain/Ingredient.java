@@ -1,57 +1,45 @@
 package org.sfg.recipeapp.domain;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import javax.persistence.*;
 import java.math.BigDecimal;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+/**
+ * Created by jt on 6/13/17.
+ */
+@Data
+@EqualsAndHashCode(exclude = {"recipe"})
 @Entity
-@Setter
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
-@EqualsAndHashCode(exclude = { "recipe" })
 public class Ingredient {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String description;
+    private BigDecimal amount;
 
-	private String description;
+    @OneToOne(fetch = FetchType.EAGER)
+    private UnitOfMeasure uom;
 
-	private BigDecimal amount;
+    @ManyToOne
+    private Recipe recipe;
 
-	@OneToOne(fetch = FetchType.EAGER)
-	private UnitOfMeasure uom;
+    public Ingredient() {
+    }
 
-	@ManyToOne()
-	private Recipe recipe;
+    public Ingredient(String description, BigDecimal amount, UnitOfMeasure uom) {
+        this.description = description;
+        this.amount = amount;
+        this.uom = uom;
+    }
 
-	public Ingredient(String description, BigDecimal amount, UnitOfMeasure uom, Recipe recipe) {
-		super();
-		this.description = description;
-		this.amount = amount;
-		this.uom = uom;
-		this.recipe = recipe;
-	}
-
-	public Ingredient(String description, BigDecimal amount, UnitOfMeasure uom) {
-		super();
-
-		this.description = description;
-		this.amount = amount;
-		this.uom = uom;
-	}
+    public Ingredient(String description, BigDecimal amount, UnitOfMeasure uom, Recipe recipe) {
+        this.description = description;
+        this.amount = amount;
+        this.uom = uom;
+        this.recipe = recipe;
+    }
 
 }
