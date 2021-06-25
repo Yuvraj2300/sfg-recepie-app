@@ -16,6 +16,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.sfg.recipeapp.converters.RecipeCommandToRecipe;
+import org.sfg.recipeapp.converters.RecipeToRecipeCommand;
 import org.sfg.recipeapp.domain.Recipe;
 import org.sfg.recipeapp.repositories.RecipeRepository;
 
@@ -24,15 +26,23 @@ class RecipeServiceImplTest {
 
 	RecipeServiceImpl recipeService;
 
+
 	@Mock
 	RecipeRepository recipeRepository;
+
+	@Mock
+	RecipeToRecipeCommand recipeToRecipeCommand;
+
+	@Mock
+	RecipeCommandToRecipe recipeCommandToRecipe;
+
 
 
 	@BeforeEach
 	public void setUp() throws Exception {
 		MockitoAnnotations.openMocks(this);
 
-		recipeService = new RecipeServiceImpl(recipeRepository);
+		recipeService = new RecipeServiceImpl(recipeRepository, recipeCommandToRecipe, recipeToRecipeCommand);
 	}
 
 	@Test
