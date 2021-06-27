@@ -10,6 +10,7 @@ import org.sfg.recipeapp.converters.RecipeToRecipeCommand;
 import org.sfg.recipeapp.domain.Recipe;
 import org.sfg.recipeapp.repositories.RecipeRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -62,5 +63,13 @@ public class RecipeServiceImpl implements RecipeService {
 		Recipe savedRecipe = recipeRepo.save(deatachedRecipe);
 		log.debug("Saved recipeId : " + savedRecipe.getId());
 		return recipeToRecipeCommand.convert(savedRecipe);
+	}
+
+
+
+	@Override
+	@Transactional
+	public RecipeCommand findCommandById(Long l) {
+		return recipeToRecipeCommand.convert(findById(l));
 	}
 }

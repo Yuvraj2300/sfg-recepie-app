@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.sfg.recipeapp.commands.RecipeCommand;
 import org.sfg.recipeapp.converters.RecipeCommandToRecipe;
 import org.sfg.recipeapp.converters.RecipeToRecipeCommand;
 import org.sfg.recipeapp.domain.Recipe;
@@ -76,5 +77,25 @@ class RecipeServiceImplTest {
 		verify(recipeRepository, never()).findById(ArgumentMatchers.anyLong());
 	}
 
+
+	@Test
+	public void getRecipeCoomandByIdTest() throws Exception {
+		Recipe recipe = new Recipe();
+		recipe.setId(1L);
+		Optional<Recipe> recipeOptional = Optional.of(recipe);
+
+		when(recipeRepository.findById(ArgumentMatchers.anyLong())).thenReturn(recipeOptional);
+
+		RecipeCommand recipeCommand = new RecipeCommand();
+		recipeCommand.setId(1L);
+
+		when(recipeToRecipeCommand.convert(ArgumentMatchers.any())).thenReturn(recipeCommand);
+
+		RecipeCommand commandById = recipeService.findCommandById(1L);
+
+		assertNotNull(commandById, "Null recipe returned");
+		verify(recipeRepository, times(1)).findById(ArgumentMatchers.anyLong());
+		verify(recipeRepository, never()).findAll();
+	}
 
 }
