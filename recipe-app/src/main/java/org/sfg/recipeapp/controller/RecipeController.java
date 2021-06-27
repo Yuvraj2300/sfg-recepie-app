@@ -24,7 +24,7 @@ public class RecipeController {
 
 
 
-	@RequestMapping(value = "recipe/show/{id}", method = { RequestMethod.GET, RequestMethod.GET })
+	@RequestMapping(value = "recipe/{id}/show", method = { RequestMethod.GET, RequestMethod.GET })
 	public String showById(@PathVariable String id, Model model) {
 		log.info("trying to show recipe with id {}", id);
 		model.addAttribute("recipe", recipeService.findById(Long.valueOf(id)));
@@ -32,6 +32,12 @@ public class RecipeController {
 	}
 
 
+
+	@RequestMapping(value = "recipe/{id}/update", method = { RequestMethod.GET, RequestMethod.GET })
+	public String updateRecipe(@PathVariable String id, Model model) {
+		model.addAttribute("recipe", recipeService.findCommandById(Long.valueOf(id)));
+		return "recipe/recipeform";
+	}
 
 
 	@RequestMapping("recipe/new")
@@ -54,7 +60,7 @@ public class RecipeController {
 		log.info("trying to save new recipe ::: {}", command.toString());
 		RecipeCommand saveRecipe = recipeService.saveRecipeCommand(command);
 
-		return "redirect:/recipe/show/" + saveRecipe.getId();
+		return "redirect:/recipe/" + saveRecipe.getId() + "/show";
 	}
 
 }
