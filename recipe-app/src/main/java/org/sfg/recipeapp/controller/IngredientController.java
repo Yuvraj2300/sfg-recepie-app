@@ -1,5 +1,6 @@
 package org.sfg.recipeapp.controller;
 
+import org.sfg.recipeapp.service.IngredientService;
 import org.sfg.recipeapp.service.RecipeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,12 +16,20 @@ public class IngredientController {
 
 	private final RecipeService recipeService;
 
+	private final IngredientService ingredService;
 
 
-	public IngredientController(RecipeService recipeService) {
+
+
+
+	public IngredientController(RecipeService recipeService, IngredientService ingredService) {
 		super();
 		this.recipeService = recipeService;
+		this.ingredService = ingredService;
 	}
+
+
+
 
 
 	@GetMapping("/recipe/{recipeId}/ingredients")
@@ -31,4 +40,13 @@ public class IngredientController {
 		return "recipe/ingredient/list";
 	}
 
+
+
+	@GetMapping("/recipe/{recipeId}/ingredient/{id}/show")
+	public String showRecipeIngredient(@PathVariable String recipeId, @PathVariable String id, Model model) {
+		log.trace("Trying to show you the ingredient for ingredientId {} with recipeId {}", id, recipeId);
+		model.addAttribute("ingredient", ingredService.findByRecipeIdAndIngredientId(Long.valueOf(recipeId), Long.valueOf(id)));
+
+		return "recipe/ingredient/show";
+	}
 }
