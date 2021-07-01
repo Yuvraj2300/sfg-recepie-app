@@ -42,7 +42,7 @@ public class IngredientController {
 
 
 
-	@GetMapping("/recipe/{recipeId}/ingredients/{id}/show")
+	@GetMapping("/recipe/{recipeId}/ingredient/{id}/show")
 	public String showRecipeIngredient(@PathVariable String recipeId, @PathVariable String id, Model model) {
 		log.trace("Trying to show you the ingredient for ingredientId {} with recipeId {}", id, recipeId);
 		model.addAttribute("ingredient", ingredService.findByRecipeIdAndIngredientId(Long.valueOf(recipeId), Long.valueOf(id)));

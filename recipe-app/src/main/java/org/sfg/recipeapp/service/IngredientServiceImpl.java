@@ -36,7 +36,7 @@ public class IngredientServiceImpl implements IngredientService {
 
 		if (!recipeOptional.isPresent()) {
 			//todo impl error handling
-			log.error("recipe id not found. Id: " + recipeId);
+			log.trace("recipe id not found. Id: " + recipeId);
 		}
 
 		Recipe recipe = recipeOptional.get();
@@ -48,7 +48,7 @@ public class IngredientServiceImpl implements IngredientService {
 		// 	@formatter:on
 
 		if (!ingredCommand.isPresent()) {
-			log.error("Ingredient id not found: " + ingredId);
+			log.trace("Ingredient id not found: " + ingredId);
 		}
 
 		return ingredCommand.get();
