@@ -1,11 +1,16 @@
 package org.sfg.recipeapp.controller;
 
+import org.sfg.recipeapp.commands.IngredientCommand;
 import org.sfg.recipeapp.service.IngredientService;
 import org.sfg.recipeapp.service.RecipeService;
+import org.sfg.recipeapp.service.UnitOfMeasureService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,18 +23,38 @@ public class IngredientController {
 
 	private final IngredientService ingredService;
 
+	private final UnitOfMeasureService unitOfMeasureService;
 
 
-
-
-	public IngredientController(RecipeService recipeService, IngredientService ingredService) {
+	public IngredientController(RecipeService recipeService, IngredientService ingredService, UnitOfMeasureService unitOfMeasureService) {
 		super();
 		this.recipeService = recipeService;
 		this.ingredService = ingredService;
+		this.unitOfMeasureService = unitOfMeasureService;
+	}
+
+
+	@GetMapping("/recipe/{recipeId}/ingredient/{ingredId}/update")
+	public String updateIngred(@PathVariable String recipeId, @PathVariable String ingredId, Model model) {
+		model.addAttribute("ingredient", ingredService.findByRecipeIdAndIngredientId(Long.valueOf(recipeId), Long.valueOf(ingredId)));
+
+		model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
+
+		return "recipe/ingredient/ingredientform";
 	}
 
 
 
+	@PostMapping
+	@RequestMapping("recipe/{recipeId}/ingredient")
+	public String saveOrUpdate(@ModelAttribute IngredientCommand command) {
+		IngredientCommand savedCommand = ingredService.saveIngredientCommand(command);
+
+		log.debug("saved receipe id:" + savedCommand.getRecipeId());
+		log.debug("saved ingredient id:" + savedCommand.getId());
+
+		return "redirect:/recipe/" + savedCommand.getRecipeId() + "/ingredient/" + savedCommand.getId() + "/show";
+	}
 
 
 	@GetMapping("/recipe/{recipeId}/ingredients")
