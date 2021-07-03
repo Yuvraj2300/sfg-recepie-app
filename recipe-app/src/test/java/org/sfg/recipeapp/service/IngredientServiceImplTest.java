@@ -13,35 +13,41 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.sfg.recipeapp.commands.IngredientCommand;
+import org.sfg.recipeapp.converters.IngredientCommandToIngredient;
 import org.sfg.recipeapp.converters.IngredientToIngredientCommand;
+import org.sfg.recipeapp.converters.UnitOfMeasureCommandToUnitOfMeasure;
 import org.sfg.recipeapp.converters.UnitOfMeasureToUnitOfMeasureCommand;
 import org.sfg.recipeapp.domain.Ingredient;
 import org.sfg.recipeapp.domain.Recipe;
 import org.sfg.recipeapp.repositories.RecipeRepository;
+import org.sfg.recipeapp.repositories.UnitOfMeasureRepository;
 
 class IngredientServiceImplTest {
 
 
 	private final IngredientToIngredientCommand ingredientToIngredientCommand;
+	private final IngredientCommandToIngredient ingredientCommandToIngredient;
 
 	@Mock
 	RecipeRepository recipeRepository;
 
 	IngredientService ingredientService;
 
+	@Mock
+	UnitOfMeasureRepository unitOfMeasureRepository;
+
 	//init converters
 	public IngredientServiceImplTest() {
 		this.ingredientToIngredientCommand = new IngredientToIngredientCommand(new UnitOfMeasureToUnitOfMeasureCommand());
+		this.ingredientCommandToIngredient = new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure());
 	}
-
-
 
 
 	@BeforeEach
 	public void setUp() throws Exception {
 		MockitoAnnotations.openMocks(this);
 
-		ingredientService = new IngredientServiceImpl(ingredientToIngredientCommand, recipeRepository);
+		ingredientService = new IngredientServiceImpl(ingredientToIngredientCommand, ingredientCommandToIngredient, recipeRepository, unitOfMeasureRepository);
 	}
 
 	@Test
