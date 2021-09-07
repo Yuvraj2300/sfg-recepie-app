@@ -1,6 +1,8 @@
 package org.sfg.recipeapp.controller;
 
 import org.sfg.recipeapp.commands.IngredientCommand;
+import org.sfg.recipeapp.commands.RecipeCommand;
+import org.sfg.recipeapp.commands.UnitOfMeasureCommand;
 import org.sfg.recipeapp.service.IngredientService;
 import org.sfg.recipeapp.service.RecipeService;
 import org.sfg.recipeapp.service.UnitOfMeasureService;
@@ -74,4 +76,25 @@ public class IngredientController {
 
 		return "recipe/ingredient/show";
 	}
+
+	@GetMapping("recipe/{recipeId}/ingredient/new")
+	public String newRecipe(@PathVariable String recipeId, Model model) throws Exception {
+		RecipeCommand recipeCommand = recipeService.findCommandById(Long.valueOf(recipeId));
+		if (null == recipeCommand) {
+			throw new Exception("Id was null");
+		}
+
+		IngredientCommand ingredientCommand = new IngredientCommand();
+		ingredientCommand.setRecipeId(Long.valueOf(recipeId));
+		model.addAttribute("ingredient", ingredientCommand);
+
+		//init uom
+		ingredientCommand.setUom(new UnitOfMeasureCommand());
+
+		model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
+
+		return "recipe/ingredient/ingredientform";
+	}
+
+
 }
