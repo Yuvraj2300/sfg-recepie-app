@@ -3,6 +3,7 @@ package org.sfg.recipeapp.controller;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -143,5 +144,13 @@ class IngredientControllerTest {
 		// @formatter:on
 
 		verify(recipeService, times(1)).findCommandById(ArgumentMatchers.anyLong());
+	}
+
+
+	@Test
+	void testDeleteIngred() throws Exception {
+		mockMvc.perform(delete("/recipe/2/ingredient/3/delete")).andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/recipe/2/ingredients"));
+
+		verify(ingredService, times(1)).deleteById(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong());
 	}
 }
