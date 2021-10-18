@@ -8,6 +8,7 @@ import org.sfg.recipeapp.commands.RecipeCommand;
 import org.sfg.recipeapp.converters.RecipeCommandToRecipe;
 import org.sfg.recipeapp.converters.RecipeToRecipeCommand;
 import org.sfg.recipeapp.domain.Recipe;
+import org.sfg.recipeapp.exceptions.NotFoundException;
 import org.sfg.recipeapp.repositories.RecipeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,7 +51,7 @@ public class RecipeServiceImpl implements RecipeService {
 		Optional<Recipe> recipeOptional = recipeRepo.findById(l);
 
 		if (!recipeOptional.isPresent()) {
-			throw new RuntimeException("Recipe Not Found!");
+			throw new NotFoundException("Recipe Not Found!");
 		}
 
 		return recipeOptional.get();

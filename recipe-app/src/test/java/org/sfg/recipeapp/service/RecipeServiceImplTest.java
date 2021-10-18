@@ -1,5 +1,6 @@
 package org.sfg.recipeapp.service;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.never;
@@ -20,6 +21,7 @@ import org.sfg.recipeapp.commands.RecipeCommand;
 import org.sfg.recipeapp.converters.RecipeCommandToRecipe;
 import org.sfg.recipeapp.converters.RecipeToRecipeCommand;
 import org.sfg.recipeapp.domain.Recipe;
+import org.sfg.recipeapp.exceptions.NotFoundException;
 import org.sfg.recipeapp.repositories.RecipeRepository;
 
 class RecipeServiceImplTest {
@@ -108,4 +110,14 @@ class RecipeServiceImplTest {
 		//then
 		verify(recipeRepository, times(1)).deleteById(ArgumentMatchers.anyLong());
 	}
+
+	@Test
+	void testRecipeNull() throws Exception {
+		Optional<Recipe> recipeOptional = Optional.empty();
+
+		when(recipeRepository.findById(ArgumentMatchers.anyLong())).thenReturn(recipeOptional);
+
+		assertThatThrownBy(() -> recipeService.findById(1L)).isInstanceOf(NotFoundException.class).hasMessage("Recipe Not Found!");
+	}
+
 }
