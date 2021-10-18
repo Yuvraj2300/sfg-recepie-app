@@ -51,7 +51,7 @@ class RecipeControllerTest {
 
 	@Test
 	public void testGetRecipeNotFound() throws Exception {
-		MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+		MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).setControllerAdvice(ControllerExceptionHandler.class).build();
 
 		when(recipeService.findById(ArgumentMatchers.anyLong())).thenThrow(NotFoundException.class);
 
