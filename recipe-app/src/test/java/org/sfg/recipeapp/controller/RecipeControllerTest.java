@@ -14,6 +14,7 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.sfg.recipeapp.domain.Recipe;
+import org.sfg.recipeapp.exceptions.NotFoundException;
 import org.sfg.recipeapp.service.RecipeService;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -49,6 +50,17 @@ class RecipeControllerTest {
 
 
 	@Test
+	public void testGetRecipeNotFound() throws Exception {
+		MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+
+		when(recipeService.findById(ArgumentMatchers.anyLong())).thenThrow(NotFoundException.class);
+
+		mockMvc.perform(get("/recipe/1/show")).andExpect(view().name("404error"));
+	}
+
+
+
+	@Test
 	public void testDelete() throws Exception {
 		MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 		// @formatter:off
@@ -58,7 +70,6 @@ class RecipeControllerTest {
 		// @formatter:on
 
 		verify(recipeService, times(1)).deleteById(ArgumentMatchers.anyLong());
-		;
 	}
 
 }
