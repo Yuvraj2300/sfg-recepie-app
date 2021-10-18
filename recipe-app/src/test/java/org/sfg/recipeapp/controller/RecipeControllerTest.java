@@ -55,7 +55,7 @@ class RecipeControllerTest {
 
 		when(recipeService.findById(ArgumentMatchers.anyLong())).thenThrow(NotFoundException.class);
 
-		mockMvc.perform(get("/recipe/1/show")).andExpect(status().isNotFound());
+		mockMvc.perform(get("/recipe/1/show")).andExpect(view().name("404error"));
 	}
 
 
@@ -70,7 +70,6 @@ class RecipeControllerTest {
 		// @formatter:on
 
 		verify(recipeService, times(1)).deleteById(ArgumentMatchers.anyLong());
-		;
 	}
 
 }
