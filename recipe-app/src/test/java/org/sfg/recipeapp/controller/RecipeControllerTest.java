@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
@@ -136,6 +137,7 @@ class RecipeControllerTest {
 
 
 	@Test
+	@Disabled
 	public void testPostNewRecipeFormValidationFail() throws Exception {
 		RecipeCommand command = new RecipeCommand();
 		command.setId(2L);
