@@ -117,7 +117,7 @@ class RecipeServiceImplTest {
 
 		when(recipeRepository.findById(ArgumentMatchers.anyLong())).thenReturn(recipeOptional);
 
-		assertThatThrownBy(() -> recipeService.findById(1L)).isInstanceOf(NotFoundException.class).hasMessage("Recipe Not Found!");
+		assertThatThrownBy(() -> recipeService.findById(1L)).isInstanceOf(NotFoundException.class).hasMessageContaining("Recipe Not Found. For ID value: ");
 	}
 
 }

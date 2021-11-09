@@ -6,9 +6,11 @@ import org.sfg.recipeapp.service.RecipeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -21,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 public class RecipeController {
 
 	private final RecipeService recipeService;
+	private static final String RECIPE_RECIPEFORM_URL = "recipe/recipeform";
 
 	public RecipeController(RecipeService recipeService) {
 		this.recipeService = recipeService;
@@ -41,7 +44,7 @@ public class RecipeController {
 	@RequestMapping(value = "recipe/{id}/update", method = { RequestMethod.GET, RequestMethod.PUT })
 	public String updateRecipe(@PathVariable String id, Model model) {
 		model.addAttribute("recipe", recipeService.findCommandById(Long.valueOf(id)));
-		return "recipe/recipeform";
+		return RECIPE_RECIPEFORM_URL;
 	}
 
 
@@ -70,8 +73,18 @@ public class RecipeController {
 	 * @return
 	 * @implNote So this returns a redirect once the post is completed!
 	 */
-	@RequestMapping(value = "recipe", method = { RequestMethod.GET, RequestMethod.GET })
-	public String saveOrUpdate(@ModelAttribute RecipeCommand command) {
+	@PostMapping(value = "recipe")
+	public String saveOrUpdate(@ModelAttribute RecipeCommand command, BindingResult bindingResult) {
+
+		if (bindingResult.hasErrors()) {
+			bindingResult.getAllErrors().forEach(error -> {
+				log.error("There was an error :- " + error.toString());
+			});
+
+			return RECIPE_RECIPEFORM_URL;
+		}
+
+
 		log.info("trying to save new recipe ::: {}", command.toString());
 		RecipeCommand saveRecipe = recipeService.saveRecipeCommand(command);
 
